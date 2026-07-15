@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeflectX — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d10;
+    --panel:#12151a;
+    --panel-2:#171b21;
+    --border:#232830;
+    --text:#e6e9ed;
+    --text-dim:#8b93a1;
+    --text-faint:#5b6270;
+    --green:#3ddc6f;
+    --green-dim:#1f5c3a;
+    --amber:#ffb84d;
+    --amber-dim:#5c4a1a;
+    --red:#ff5c5c;
+    --red-dim:#5c1a1a;
+    --blue:#5b9dff;
+    --blue-dim:#1a3a5c;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --sans:'IBM Plex Sans', system-ui, sans-serif;
+    --radius:10px;
+    --nav-w:264px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:15.5px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--green-dim); color:var(--green);}
+
+  a{color:var(--green); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{
+    outline:2px solid var(--green); outline-offset:2px;
+  }
+
+  code, pre, kbd{font-family:var(--mono);}
+  code{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    padding:.15em .45em;
+    border-radius:5px;
+    font-size:.9em;
+    color:#c9f5d9;
+  }
+  pre{
+    background:#090a0d;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    overflow-x:auto;
+    font-size:13.5px;
+    line-height:1.6;
+    position:relative;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#d7f5e0; font-size:1em;
+  }
+
+  h1,h2,h3,h4{
+    font-family:var(--mono);
+    font-weight:700;
+    letter-spacing:-.01em;
+    color:#fff;
+  }
+
+  /* ---------- layout ---------- */
+  .shell{display:flex; min-height:100vh;}
+
+  .sidebar{
+    width:var(--nav-w);
+    flex-shrink:0;
+    border-right:1px solid var(--border);
+    background:var(--panel);
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    padding:22px 16px 40px;
+  }
+  .brand{
+    font-family:var(--mono);
+    font-weight:800;
+    font-size:20px;
+    color:#fff;
+    display:flex;
+    align-items:baseline;
+    gap:2px;
+    padding:4px 8px 4px;
+    margin-bottom:4px;
+  }
+  .brand .prompt{color:var(--green);}
+  .brand .cursor{
+    display:inline-block; width:8px; height:16px; background:var(--green);
+    margin-left:4px; animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  .tagline{
+    font-size:11.5px; color:var(--text-faint); padding:0 8px 20px;
+    border-bottom:1px solid var(--border); margin-bottom:14px;
+    text-transform:uppercase; letter-spacing:.08em;
+  }
+
+  .nav-group{margin-bottom:4px;}
+  .nav-label{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--text-faint); padding:14px 8px 6px; font-weight:600;
+  }
+  .nav-link{
+    display:block; padding:6px 8px; border-radius:6px; color:var(--text-dim);
+    font-size:13.5px; text-decoration:none; border-left:2px solid transparent;
+  }
+  .nav-link:hover{color:var(--text); background:var(--panel-2); text-decoration:none;}
+  .nav-link.active{
+    color:var(--green); background:var(--panel-2); border-left:2px solid var(--green);
+  }
+
+  main{flex:1; min-width:0;}
+  .content{
+    max-width:760px;
+    margin:0 auto;
+    padding:56px 32px 120px;
+  }
+
+  section{margin-bottom:64px; scroll-margin-top:24px;}
+  section h2{
+    font-size:22px; margin:0 0 6px;
+    display:flex; align-items:center; gap:10px;
+  }
+  section h2 .idx{color:var(--green); font-size:14px; font-weight:600;}
+  section .lede{color:var(--text-dim); margin:0 0 22px; font-size:15px; max-width:60ch;}
+  h3{font-size:16px; margin:28px 0 10px; color:var(--text);}
+  p{margin:0 0 14px; color:#cfd4dc;}
+  ul, ol{margin:0 0 16px; padding-left:22px; color:#cfd4dc;}
+  li{margin-bottom:6px;}
+  strong{color:#fff; font-weight:600;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    background:linear-gradient(180deg,#0f1218,#0a0c0f);
+    padding:26px 26px 20px;
+    margin-bottom:20px;
+    box-shadow:0 0 0 1px rgba(61,220,111,.04), 0 20px 60px -30px rgba(61,220,111,.15);
+  }
+  .hero-top{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;
+  }
+  .dots{display:flex; gap:6px;}
+  .dots span{width:10px; height:10px; border-radius:50%; display:inline-block;}
+  .dots span:nth-child(1){background:#ff5f57;}
+  .dots span:nth-child(2){background:#febc2e;}
+  .dots span:nth-child(3){background:#28c840;}
+  .hero-status{
+    font-family:var(--mono); font-size:11.5px; color:var(--green);
+    display:flex; align-items:center; gap:6px;
+  }
+  .hero-status .pulse{
+    width:7px; height:7px; border-radius:50%; background:var(--green);
+    box-shadow:0 0 0 0 rgba(61,220,111,.6); animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(61,220,111,.55);}
+    70%{box-shadow:0 0 0 8px rgba(61,220,111,0);}
+    100%{box-shadow:0 0 0 0 rgba(61,220,111,0);}
+  }
+  .term{
+    font-family:var(--mono); font-size:12.8px; line-height:1.9; min-height:168px;
+  }
+  .term .ln{opacity:0; transform:translateY(2px); animation:rise .35s ease forwards;}
+  .term .ts{color:var(--text-faint);}
+  .term .tag-warning{color:var(--amber); font-weight:600;}
+  .term .tag-critical{color:var(--red); font-weight:600;}
+  .term .tag-info{color:var(--blue); font-weight:600;}
+  .term .rule{color:#fff;}
+  .term .path{color:var(--text-dim);}
+  @keyframes rise{to{opacity:1; transform:translateY(0);}}
+  .hero h1{
+    font-size:15px; margin:18px 0 4px; color:var(--text-dim); font-weight:500;
+    font-family:var(--sans);
+  }
+  .hero p.hero-copy{
+    font-size:15px; color:#cfd4dc; margin:0; max-width:56ch;
+  }
+
+  /* ---------- severity legend ---------- */
+  .legend{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 20px;}
+  .chip{
+    font-family:var(--mono); font-size:12px; padding:5px 10px; border-radius:999px;
+    border:1px solid var(--border); display:flex; align-items:center; gap:6px;
+  }
+  .chip .dot{width:8px; height:8px; border-radius:50%;}
+  .chip.critical{color:var(--red); background:rgba(255,92,92,.08);}
+  .chip.critical .dot{background:var(--red);}
+  .chip.warning{color:var(--amber); background:rgba(255,184,77,.08);}
+  .chip.warning .dot{background:var(--amber);}
+  .chip.info{color:var(--blue); background:rgba(91,157,255,.08);}
+  .chip.info .dot{background:var(--blue);}
+
+  /* ---------- cards / tables ---------- */
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:18px 0;}
+  @media (max-width:640px){.grid{grid-template-columns:1fr;}}
+  .card{
+    border:1px solid var(--border); background:var(--panel); border-radius:var(--radius);
+    padding:16px 18px;
+  }
+  .card .k{font-family:var(--mono); font-size:12.5px; color:var(--green); margin-bottom:6px; font-weight:600;}
+  .card .v{font-size:13.5px; color:var(--text-dim);}
+
+  table{width:100%; border-collapse:collapse; margin:14px 0 22px; font-size:13.5px;}
+  th, td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--border);}
+  th{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--text-faint); font-weight:600;
+  }
+  td{color:#cfd4dc;}
+  td code{font-size:.85em;}
+  tr:last-child td{border-bottom:none;}
+
+  .steps{list-style:none; padding:0; margin:0;counter-reset:step;}
+  .steps li{
+    counter-increment:step; position:relative; padding-left:38px; margin-bottom:18px;
+  }
+  .steps li::before{
+    content:counter(step); position:absolute; left:0; top:0;
+    width:26px; height:26px; border-radius:7px; background:var(--panel-2);
+    border:1px solid var(--border); color:var(--green); font-family:var(--mono);
+    font-size:12.5px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+
+  .callout{
+    border:1px solid var(--border); border-left:3px solid var(--amber);
+    background:rgba(255,184,77,.05); border-radius:0 8px 8px 0;
+    padding:12px 16px; margin:16px 0; font-size:13.8px; color:#e3d9c4;
+  }
+  .callout.tip{border-left-color:var(--green); background:rgba(61,220,111,.05); color:#cfe9d8;}
+  .callout .lbl{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em;
+    font-weight:700; display:block; margin-bottom:4px;
+  }
+  .callout.tip .lbl{color:var(--green);}
+  .callout:not(.tip) .lbl{color:var(--amber);}
+
+  .platform-tag{
+    display:inline-block; font-family:var(--mono); font-size:10.5px; font-weight:700;
+    padding:2px 7px; border-radius:5px; margin-left:8px; vertical-align:middle;
+    letter-spacing:.03em;
+  }
+  .platform-tag.linux{color:var(--blue); background:rgba(91,157,255,.12);}
+  .platform-tag.windows{color:var(--green); background:rgba(61,220,111,.12);}
+
+  .copy-btn{
+    position:absolute; top:10px; right:10px; font-family:var(--sans);
+    font-size:11px; color:var(--text-dim); background:var(--panel-2);
+    border:1px solid var(--border); border-radius:5px; padding:4px 9px; cursor:pointer;
+  }
+  .copy-btn:hover{color:var(--text); border-color:var(--text-faint);}
+
+  footer{
+    border-top:1px solid var(--border); padding:28px 32px 60px; max-width:760px;
+    margin:0 auto; color:var(--text-faint); font-size:12.5px;
+  }
+
+  /* mobile nav toggle */
+  .nav-toggle{display:none;}
+  @media (max-width:900px){
+    .shell{flex-direction:column;}
+    .sidebar{
+      position:relative; width:100%; height:auto; top:auto;
+      border-right:none; border-bottom:1px solid var(--border);
+      padding:16px 16px 8px;
+    }
+    .nav-toggle{
+      display:flex; align-items:center; justify-content:space-between; width:100%;
+      background:none; border:none; color:var(--text); cursor:pointer; padding:4px 0 12px;
+    }
+    .nav-body{display:none;}
+    .nav-body.open{display:block;}
+    .content{padding:36px 20px 80px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="prompt">&gt;</span>DeflectX<span class="cursor"></span></div>
+    <div class="tagline">DeflectX SIEM · Desktop Edition</div>
+
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navBody">
+      <span style="font-family:var(--mono); font-size:12.5px; color:var(--text-dim);">Menu</span>
+      <span style="color:var(--green); font-family:var(--mono);">☰</span>
+    </button>
+
+    <div class="nav-body" id="navBody">
+      <div class="nav-group">
+        <div class="nav-label">Get started</div>
+        <a class="nav-link" href="#overview">Overview</a>
+        <a class="nav-link" href="#install">Install &amp; run</a>
+        <a class="nav-link" href="#build-exe">Build a Windows .exe</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Using the dashboard</div>
+        <a class="nav-link" href="#dashboard">Live Dashboard tour</a>
+        <a class="nav-link" href="#severities">Severity levels</a>
+        <a class="nav-link" href="#analytics">Analytics tab</a>
+        <a class="nav-link" href="#storage">Storage &amp; export</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Configuring</div>
+        <a class="nav-link" href="#rules">Detection rules</a>
+        <a class="nav-link" href="#sources">Log sources</a>
+        <a class="nav-link" href="#geoip">GeoIP lookups</a>
+        <a class="nav-link" href="#notifications">Notifications</a>
+        <a class="nav-link" href="#config-file">Config file reference</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Reference</div>
+        <a class="nav-link" href="#windows-notes">Windows audit policy</a>
+        <a class="nav-link" href="#troubleshooting">Troubleshooting</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="content">
+
+      <div class="hero">
+        <div class="hero-top">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="hero-status"><span class="pulse"></span>MONITORING</div>
+        </div>
+        <div class="term" id="term"></div>
+        <h1>DeflectX — a desktop SIEM that watches your logs and tells you what matters</h1>
+        <p class="hero-copy">This page covers everything from first launch to writing your own detection rules — whether you're running the Python script directly or a packaged Windows .exe.</p>
+      </div>
+
+      <section id="overview">
+        <h2><span class="idx">§</span>Overview</h2>
+        <p class="lede">What DeflectX watches, and what it does when it doesn't like what it sees.</p>
+
+        <p>DeflectX tails one or more system log sources in real time, checks every line against a set of regex rules, and raises an alert the moment something suspicious shows up — a failed login, a new user account, a cleared audit log, a service quietly installing itself. Alerts land in a live table, get written to a text log and a SQLite database, and can trigger a tray notification or a beep.</p>
+
+        <div class="grid">
+          <div class="card"><div class="k">Multi-source</div><div class="v">Watch journalctl, the Windows Event Log, a tailed file, or any custom command — all at once.</div></div>
+          <div class="card"><div class="k">Editable rules</div><div class="v">Add, edit, or remove detection rules from the app. No code changes needed.</div></div>
+          <div class="card"><div class="k">GeoIP enrichment</div><div class="v">Public IPs found in a matching line get a country and city, looked up automatically.</div></div>
+          <div class="card"><div class="k">History &amp; charts</div><div class="v">Every alert is stored in SQLite. The Analytics tab charts alerts by rule and over time.</div></div>
+        </div>
+      </section>
+
+      <section id="install">
+        <h2><span class="idx">§</span>Install &amp; run</h2>
+        <p class="lede">Get the app running from source in under a minute.</p>
+
+        <ol class="steps">
+          <li><strong>Install PyQt6</strong> — the only hard requirement.
+            <pre><button class="copy-btn">Copy</button><code>pip install PyQt6</code></pre>
+          </li>
+          <li><strong>(Optional) Install the extras</strong> — matplotlib powers the Analytics tab; pywin32 is needed only on Windows for the Event Log source.
+            <pre><button class="copy-btn">Copy</button><code>pip install matplotlib pywin32</code></pre>
+          </li>
+          <li><strong>Run it.</strong>
+            <pre><button class="copy-btn">Copy</button><code>python siem_gui.py</code></pre>
+          </li>
+        </ol>
+
+        <div class="callout tip">
+          <span class="lbl">First run</span>
+          A <code>siem_config.json</code> file is created automatically next to the script, with sensible defaults for your operating system — <code>journalctl</code> on Linux, the Windows <code>System</code> event log on Windows. Nothing to set up before your first launch.
+        </div>
+
+        <div class="callout">
+          <span class="lbl">Common snag</span>
+          If you see <code>ModuleNotFoundError: No module named 'PyQt6'</code>, it usually means <code>pip install</code> and <code>python</code> point at two different interpreters. Check which interpreter your editor or terminal is actually using and install into that one.
+        </div>
+      </section>
+
+      <section id="build-exe">
+        <h2><span class="idx">§</span>Build a Windows .exe <span class="platform-tag windows">WINDOWS</span></h2>
+        <p class="lede">Package the app into a single file that runs without a Python install.</p>
+
+        <p>This uses <a href="https://pyinstaller.org" target="_blank" rel="noopener">PyInstaller</a>, and it has to run <strong>on Windows</strong> — PyInstaller doesn't cross-compile from another OS.</p>
+
+        <ol class="steps">
+          <li>Install the build tools:
+            <pre><button class="copy-btn">Copy</button><code>pip install pyinstaller PyQt6 pywin32 matplotlib</code></pre>
+          </li>
+          <li>From the folder containing <code>siem_gui.py</code>, run:
+            <pre><button class="copy-btn">Copy</button><code>pyinstaller --noconfirm --onefile --windowed --name "DeflectX" --hidden-import win32timezone --hidden-import win32evtlog --hidden-import win32evtlogutil --collect-submodules matplotlib.backends siem_gui.py</code></pre>
+          </li>
+          <li>Find your executable at <code>dist\DeflectX.exe</code> — it's fully self-contained.</li>
+        </ol>
+
+        <table>
+          <tr><th>Flag</th><th>What it does</th></tr>
+          <tr><td><code>--onefile</code></td><td>Bundles everything into one .exe (slightly slower to start; unpacks to a temp folder each launch)</td></tr>
+          <tr><td><code>--windowed</code></td><td>Hides the console window, since this is a GUI app</td></tr>
+          <tr><td><code>--hidden-import win32timezone</code></td><td>Fixes a timestamp bug PyInstaller commonly misses for Event Log sources</td></tr>
+        </table>
+
+        <div class="callout tip">
+          <span class="lbl">Where files land</span>
+          The packaged app saves its config, database, and text log next to <code>DeflectX.exe</code> itself — not wherever the current working directory happens to be when it's launched.
+        </div>
+      </section>
+
+      <section id="dashboard">
+        <h2><span class="idx">§</span>Live Dashboard tour</h2>
+        <p class="lede">Everything on the main screen, and what it's for.</p>
+
+        <h3>Toolbar</h3>
+        <ul>
+          <li><strong>Start Monitoring</strong> — begins tailing every enabled source. The status dot turns green while running.</li>
+          <li><strong>Stop</strong> — stops all sources. Existing alerts stay in the table.</li>
+          <li><strong>Clear Alerts View</strong> — empties the table on screen only. Nothing is deleted from the text log or database.</li>
+        </ul>
+
+        <h3>Filter row</h3>
+        <p>Narrow the alert table by <strong>rule</strong>, <strong>severity</strong>, or a free-text <strong>search</strong> that matches across the rule name, source, IP, location, and log text.</p>
+
+        <h3>Alerts table</h3>
+        <p>Each row shows the timestamp, which source it came from, the rule that matched, severity, any public IP found in the line, its resolved location, and the raw log text — color-coded by severity so the worst alerts are the easiest to spot while scanning.</p>
+
+        <h3>Live feed panel</h3>
+        <p>Below the table, every line from every active source scrolls by in real time, tagged with its source name — useful for confirming a source is actually producing data, even when nothing has triggered an alert yet.</p>
+      </section>
+
+      <section id="severities">
+        <h2><span class="idx">§</span>Severity levels</h2>
+        <p class="lede">Every rule is tagged with one of three severities, used for row color, filtering, and notification thresholds.</p>
+        <div class="legend">
+          <span class="chip critical"><span class="dot"></span>Critical</span>
+          <span class="chip warning"><span class="dot"></span>Warning</span>
+          <span class="chip info"><span class="dot"></span>Info</span>
+        </div>
+        <p><strong>Critical</strong> is for things that are rarely benign — an audit log getting cleared, a new admin-group member, a deleted account. <strong>Warning</strong> covers things worth a look but often legitimate — a failed login, a new service. <strong>Info</strong> is background context, like a routine sudo command or a new process spawning.</p>
+      </section>
+
+      <section id="analytics">
+        <h2><span class="idx">§</span>Analytics tab</h2>
+        <p class="lede">A second view next to the dashboard, built from everything stored in SQLite.</p>
+        <p>Two charts: alerts grouped by rule, and alerts per minute over time, so a spike is obvious at a glance. Press <strong>Refresh Charts</strong> to pull the latest data. This tab needs <code>matplotlib</code> installed — if it isn't, you'll see an install hint here instead of a broken screen.</p>
+      </section>
+
+      <section id="storage">
+        <h2><span class="idx">§</span>Storage &amp; export</h2>
+        <p class="lede">Where your alert history actually lives.</p>
+        <table>
+          <tr><th>File</th><th>Contains</th></tr>
+          <tr><td><code>siem_alerts.txt</code></td><td>A plain-text append-only log of every alert, human-readable</td></tr>
+          <tr><td><code>siem_alerts.db</code></td><td>The same alerts in SQLite, used to power the Analytics tab</td></tr>
+          <tr><td><code>siem_config.json</code></td><td>Your rules, sources, and settings</td></tr>
+        </table>
+        <p>Use <strong>File → Export Alerts to CSV</strong> to save whatever's currently visible in the table (filters apply). <strong>File → Show Storage File Paths</strong> prints the exact location of all three files.</p>
+      </section>
+
+      <section id="rules">
+        <h2><span class="idx">§</span>Detection rules</h2>
+        <p class="lede">Manage → Detection Rules opens an editable table — no code required.</p>
+        <p>Each rule has a <strong>name</strong>, a <strong>regex pattern</strong> checked against every incoming line, a <strong>severity</strong>, and an optional <strong>ignore case</strong> flag. The first rule that matches a line wins — order doesn't otherwise matter.</p>
+        <p>Rule changes apply immediately to anything already running — no need to stop and restart monitoring. Log <em>sources</em> work differently; see below.</p>
+        <div class="callout">
+          <span class="lbl">Writing patterns</span>
+          Keep patterns specific enough to avoid false positives, but not so specific they only match one exact log line. Test a new rule by watching the live feed for a line you expect it to catch, and confirming it lands in the alert table.
+        </div>
+      </section>
+
+      <section id="sources">
+        <h2><span class="idx">§</span>Log sources</h2>
+        <p class="lede">Manage → Log Sources controls what DeflectX actually watches.</p>
+        <table>
+          <tr><th>Type</th><th>Platform</th><th>Target field</th></tr>
+          <tr><td><code>journalctl</code></td><td><span class="platform-tag linux">LINUX</span></td><td>Not needed</td></tr>
+          <tr><td><code>windows_eventlog</code></td><td><span class="platform-tag windows">WINDOWS</span></td><td>Log name — <code>System</code>, <code>Security</code>, or <code>Application</code></td></tr>
+          <tr><td><code>file</code></td><td>Any OS</td><td>Path to the file to tail</td></tr>
+          <tr><td><code>command</code></td><td>Any OS</td><td>Any command whose output you want streamed</td></tr>
+        </table>
+        <p>Each source can be individually enabled or disabled. Unlike rules, <strong>source changes take effect the next time you click Start</strong> — stop monitoring first if it's already running.</p>
+        <div class="callout">
+          <span class="lbl">Security log access</span>
+          Reading the Windows <code>Security</code> log normally requires running DeflectX as Administrator. The <code>System</code> log doesn't have that restriction.
+        </div>
+      </section>
+
+      <section id="geoip">
+        <h2><span class="idx">§</span>GeoIP lookups</h2>
+        <p class="lede">Turning a bare IP address into a country and city.</p>
+        <p>When a matching line contains a public IP address, DeflectX looks it up against the free <a href="https://ip-api.com" target="_blank" rel="noopener">ip-api.com</a> service and caches the result so the same IP is never looked up twice. Private, loopback, and reserved addresses are skipped automatically.</p>
+        <div class="callout">
+          <span class="lbl">Privacy note</span>
+          This sends the IP address to a third-party service over the network. Turn it off in Settings if you'd rather keep lookups offline — alerts still work fine, just without a location.
+        </div>
+      </section>
+
+      <section id="notifications">
+        <h2><span class="idx">§</span>Notifications</h2>
+        <p class="lede">Getting alerted without staring at the window.</p>
+        <p>A tray icon lets you start, stop, or reopen DeflectX without keeping the window in focus. In Settings, you can turn on desktop popups for alerts at or above a minimum severity, and a beep specifically for critical alerts.</p>
+      </section>
+
+      <section id="config-file">
+        <h2><span class="idx">§</span>Config file reference</h2>
+        <p class="lede">Everything in Settings and the rule/source editors is stored in <code>siem_config.json</code>.</p>
+        <table>
+          <tr><th>Key</th><th>Purpose</th></tr>
+          <tr><td><code>theme</code></td><td><code>"dark"</code> or <code>"light"</code></td></tr>
+          <tr><td><code>output_file</code></td><td>Path to the plain-text alert log</td></tr>
+          <tr><td><code>database.path</code></td><td>Path to the SQLite database</td></tr>
+          <tr><td><code>geoip.enabled</code></td><td>Whether IP lookups run</td></tr>
+          <tr><td><code>notifications</code></td><td>Popup / sound / minimum severity settings</td></tr>
+          <tr><td><code>sources</code></td><td>List of log sources and whether each is enabled</td></tr>
+          <tr><td><code>rules</code></td><td>List of detection rules</td></tr>
+        </table>
+        <p>You can edit this file directly while DeflectX is closed — it's plain JSON — though the in-app editors validate regex patterns for you, which a hand edit won't.</p>
+      </section>
+
+      <section id="windows-notes">
+        <h2><span class="idx">§</span>Windows audit policy <span class="platform-tag windows">WINDOWS</span></h2>
+        <p class="lede">Why the Security log might stay quiet even when it shouldn't.</p>
+        <p>Windows doesn't log things like failed logons or new user accounts by default. To see those events, turn on Advanced Audit Policy first:</p>
+        <ol class="steps">
+          <li>Open <code>secpol.msc</code> → Advanced Audit Policy Configuration, or run <code>auditpol</code> from an elevated prompt.</li>
+          <li>Enable auditing for the categories you care about — <em>Logon/Logoff</em> and <em>Account Management</em> cover most of DeflectX's default Windows rules.</li>
+          <li>Add a <code>windows_eventlog</code> source pointed at <code>Security</code>, and run DeflectX as Administrator.</li>
+        </ol>
+      </section>
+
+      <section id="troubleshooting">
+        <h2><span class="idx">§</span>Troubleshooting</h2>
+        <p class="lede">Quick answers to the errors you're most likely to hit.</p>
+
+        <h3>ModuleNotFoundError: No module named 'PyQt6'</h3>
+        <p>Your terminal and your editor are likely using different Python interpreters. Install PyQt6 into the exact interpreter shown in the error's file path, e.g. <code>/usr/bin/python -m pip install PyQt6</code>.</p>
+
+        <h3>"journalctl not found"</h3>
+        <p>You're not on a systemd-based Linux distribution. Switch the source type to <code>file</code> or <code>command</code>, or use <code>windows_eventlog</code> on Windows.</p>
+
+        <h3>No alerts ever appear</h3>
+        <p>Check the live feed panel first — if lines are showing up there but never triggering a rule, your patterns may not match the real log text. On Windows, confirm Advanced Audit Policy is enabled for the events you expect.</p>
+
+        <h3>Windows Event Log source won't start</h3>
+        <p>Install <code>pywin32</code> (<code>pip install pywin32</code>). If it's the <code>Security</code> log specifically, relaunch as Administrator.</p>
+
+        <h3>Analytics tab shows an install message instead of charts</h3>
+        <p>That's expected when <code>matplotlib</code> isn't installed — run <code>pip install matplotlib</code> and reopen the tab.</p>
+      </section>
+
+    </div>
+
+    <footer>DeflectX — desktop SIEM dashboard. This page documents the app as configured on your machine.</footer>
+  </main>
+</div>
+
+<script>
+  // Hero terminal typing sequence
+  const lines = [
+    {ts:'[2026-07-13 14:22:07]', tag:'WARNING', tagClass:'tag-warning', rule:'Failed SSH Login', path:'source: journalctl'},
+    {ts:'[2026-07-13 14:22:41]', tag:'CRITICAL', tagClass:'tag-critical', rule:'Audit Log Cleared', path:'source: Security Log'},
+    {ts:'[2026-07-13 14:23:03]', tag:'INFO', tagClass:'tag-info', rule:'New Process Created', path:'source: System Log'},
+    {ts:'[2026-07-13 14:23:58]', tag:'WARNING', tagClass:'tag-warning', rule:'User Account Created', path:'source: Security Log'},
+  ];
+  const term = document.getElementById('term');
+  let i = 0;
+  function typeLine(){
+    if(i >= lines.length){
+      setTimeout(()=>{ term.innerHTML=''; i=0; typeLine(); }, 2600);
+      return;
+    }
+    const l = lines[i];
+    const div = document.createElement('div');
+    div.className = 'ln';
+    div.innerHTML = `<span class="ts">${l.ts}</span> ALERT: <span class="${l.tagClass}">${l.tag}</span> — <span class="rule">${l.rule}</span> <span class="path">(${l.path})</span>`;
+    term.appendChild(div);
+    i++;
+    setTimeout(typeLine, 850);
+  }
+  typeLine();
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const code = btn.parentElement.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(()=>{
+        const orig = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(()=>{ btn.textContent = orig; }, 1400);
+      });
+    });
+  });
+
+  // Scroll-spy nav highlighting
+  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+  const sections = navLinks.map(a => document.querySelector(a.getAttribute('href')));
+  function onScroll(){
+    let current = sections[0];
+    for(const sec of sections){
+      if(sec && sec.getBoundingClientRect().top - 80 <= 0) current = sec;
+    }
+    navLinks.forEach(a=>{
+      a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
+    });
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navBody = document.getElementById('navBody');
+  navToggle.addEventListener('click', ()=>{
+    const open = navBody.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  navLinks.forEach(a => a.addEventListener('click', ()=>{
+    if(window.innerWidth <= 900){ navBody.classList.remove('open'); }
+  }));
+</script>
+
+</body>
+</html>

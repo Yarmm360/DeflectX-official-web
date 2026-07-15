@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeflectX - SIEM</title>
+    <style>
+        :root {
+            --bg: #0b0d10;
+            --panel: #12151a;
+            --panel-2: #171b21;
+            --border: #232830;
+            --text: #e6e9ed;
+            --text-dim: #8b93a1;
+            --text-faint: #5b6270;
+            --green: #3ddc6f;
+            --green-dim: #1f5c3a;
+            --amber: #ffb84d;
+            --amber-dim: #5c4a1a;
+            --red: #ff5c5c;
+            --red-dim: #5c1a1a;
+            --blue: #5b9dff;
+            --blue-dim: #1a3a5c;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'IBM Plex Sans', system-ui, sans-serif;
+            --radius: 10px;
+            --nav-w: 264px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #05070a;
+            color: var(--text);
+            font-family: var(--sans);
+            line-height: 1.6;
+        }
+
+        /* -------- Navigation (Structure and Logo Preserved) -------- */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgba(5, 7, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-family: var(--mono);
+            font-weight: 800;
+            font-size: 20px;
+            color: #fff;
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            padding: 4px 8px;
+            margin-bottom: 4px;
+        }
+
+        .brand .prompt {
+            color: var(--green);
+        }
+
+        .brand .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--green);
+            margin-left: 4px;
+            animation: blink 1.1s steps(1) infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .nav nav {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-family: var(--mono);
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        /* -------- Home Section -------- */
+        #home {
+            min-height: calc(100vh - 75px);
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            gap: 40px;
+        }
+
+        .left-home {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-home {
+            flex: 1;
+            height: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background-color: var(--panel);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+        }
+
+        #home h1 {
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        #home h1::after {
+            content: 'world!';
+            color: var(--green);
+            font-size: 48px;
+            font-weight: 800;
+            display: block;
+        }
+
+        #home p {
+            font-family: var(--sans);
+            color: var(--text-dim);
+            font-size: 18px;
+            border-left: 3px solid var(--green-dim);
+            padding-left: 16px;
+            max-width: 500px;
+        }
+
+        /* -------- About Section -------- */
+        #about {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 60px 40px;
+            background-color: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        #about h1 {
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 32px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        #about p {
+            color: var(--text-dim);
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        /* -------- Founder Showcase -------- */
+        #about h3 {
+            color: var(--green);
+            font-family: var(--mono);
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .founder-meta {
+            background: var(--panel-2);
+            padding: 16px 20px;
+            border-left: 4px solid var(--green);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin-bottom: 24px;
+        }
+
+        #about b {
+            color: var(--text);
+            font-size: 18px;
+            display: block;
+        }
+
+        #about i {
+            color: var(--text-faint);
+            font-style: normal;
+            font-family: var(--mono);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            #home {
+                flex-direction: column;
+                padding: 20px;
+                text-align: center;
+            }
+            .navigation {
+                padding: 15px 20px;
+            }
+            #home p {
+                border-left: none;
+                padding-left: 0;
+                margin: 0 auto;
+            }
+            .right-home {
+                width: 100%;
+                height: 300px;
+            }
+        }
+        /* -------- Footer -------- */
+        footer {
+            background-color: #05070a;
+            border-top: 1px solid var(--border);
+            padding: 40px 40px 20px 40px;
+            margin-top: 120px;
+            font-family: var(--sans);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding-bottom: 30px;
+        }
+
+        .footer-brand {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-brand p {
+            color: var(--text-dim);
+            font-size: 14px;
+            margin-top: 10px;
+            max-width: 300px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .footer-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-group h4 {
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-group a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-group a:hover {
+            color: var(--green);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(35, 40, 48, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--text-faint);
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .footer-links {
+                gap: 40px;
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navigation">
+        <div class="logo">
+            <div class="brand"><span class="prompt">&gt;</span>DeflectX<span class="cursor"></span></div>
+        </div>
+        <div class="nav">
+            <nav>
+                <li><a href="#home">Home</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="https://github.com/Yarmm360/deflectx-siem/">Download</a></li>
+                <li><a href="#about">About</a></li>
+            </nav>
+        </div>
+    </div>
+
+    <section id="home">
+        <div class="left-home">
+            <h1>Lets defend the <br></h1>
+            <p>Cybersecurity is much more than a matter of IT.<br>It’s a business imperative.</p>
+        </div>
+        <div class="right-home">
+            <img src="df3.jpeg" alt="Cybersecurity Interface Dashboard Graphic">
+        </div>
+    </section>
+
+    <section id="about">
+        <h1>About</h1>
+        <p>Most Security Information and Event Management (SIEM) tools are built for enterprise budgets and massive
+            infrastructure. They require complex cloud deployments, heavy storage configurations, and endless sign-up
+            forms just to get started. For a student, a hobbyist, or a junior SOC analyst, the barrier to entry is simply too
+            high.
+            <br><br>
+            This project changes that.
+            <br><br>
+            We believe that learning cybersecurity should be hands-on, immediate, and accessible to everyone. This is a
+            fully open-source, beginner-friendly SIEM designed to deploy just like any standard desktop software.
+            <br><br>
+            • <strong>No Sign-ups or Paywalls:</strong> Just download, install, and start analyzing.<br>
+            • <strong>Zero Cloud Dependencies:</strong> It runs entirely locally on your machine—no expensive cloud storage or complex architecture required.<br>
+            • <strong>Built for Learners:</strong> A clean, intuitive interface that helps you understand event correlation and log analysis without getting buried in enterprise bloat.
+            <br><br>
+            Whether you are spinning up your first home lab or trying to map out your first detection rules, this SIEM
+            gives you the power of log management without the setup headache.
+        </p>
+
+        <h3>Meet the Founder</h3>
+        <div class="founder-meta">
+            <b>Yar Muhammad Mangi</b>
+            <i>Founder & Lead Developer</i>
+        </div>
+
+        <p>I am a cybersecurity learner, educator, and SOC analyst. My mission is to demystify security operations
+            and make defensive cyber tactics accessible to the next generation of defenders. Through my advocacy on
+            social media (primarily LinkedIn), I realized how many aspiring professionals get stuck at the very first step:
+            infrastructure setup.
+            <br><br>
+            I built this open-source SIEM to bridge that gap—giving especially to learners a plug-and-play tool to gain
+            real-world SOC experience without the enterprise friction.
+            <br><br>
+            <strong>Join the Mission:</strong> This tool is built by a learner, for learners. Check out our repository, contribute to the
+            code, or share your feedback to help us build the ultimate gateway tool for future security analysts!
+        </p>
+    </section>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <!-- Kept the exact same logo style structure for consistency -->
+                <div class="brand"><span class="prompt">&gt;</span>DeflectX<span class="cursor"></span></div>
+                <p>An open-source, beginner-friendly SIEM built to make defensive cyber tactics accessible to the next generation of defenders.</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-group">
+                    <h4>Project</h4>
+                    <a href="#home">Home</a>
+                    <a href="deflectx_docs.html">Documentation</a>
+                    <a href="#[github-link]">Download</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Community</h4>
+                    <!-- Link to your LinkedIn profile since you mentioned advocating there -->
+                    <a href="https://www.linkedin.com/company/deflectx-siem" target="_blank">LinkedIn</a>
+                    <a href="https://github.com/Yarmm360/deflectx-siem/">GitHub</a>
+                    <a href="https://linkedin.com/in/yar-muhammad-mangi-34592433a">Founder</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div>&copy; 2026 DeflectX. All rights reserved.</div>
+            <div>Built by a learner, for learners.</div>
+        </div>
+    </footer>
+</body>
+
+</html>
