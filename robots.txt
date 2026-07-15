@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Allow: /docs
+
+Sitemap: https://deflectx.netlify.app/sitemap.xml
+
+# Host: deflectx.netlify.app
